@@ -4,9 +4,14 @@ import com.plcoding.ktorclientandroid.data.remote.dto.PostRequest
 import com.plcoding.ktorclientandroid.data.remote.dto.PostResponse
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+//import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.logging.*
+//import io.ktor.client.features.json.*
+//import io.ktor.client.features.json.serializer.*
+//import io.ktor.client.features.logging.*
+import io.ktor.serialization.kotlinx.json.*
+
 
 interface PostsService {
 
@@ -19,11 +24,15 @@ interface PostsService {
             return PostsServiceImpl(
                 client = HttpClient(Android) {
                     install(Logging) {
+                        //logger = Logger.DEFAULT
                         level = LogLevel.ALL
                     }
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer()
+                    install(ContentNegotiation) {
+                        json()
                     }
+//                    install(JsonFeature) {
+//                        serializer = KotlinxSerializer()
+//                    }
                 }
             )
         }

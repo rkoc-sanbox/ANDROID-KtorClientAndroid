@@ -3,8 +3,10 @@ package com.plcoding.ktorclientandroid.data.remote
 import com.plcoding.ktorclientandroid.data.remote.dto.PostRequest
 import com.plcoding.ktorclientandroid.data.remote.dto.PostResponse
 import io.ktor.client.*
-import io.ktor.client.features.*
+import io.ktor.client.call.*
+//import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
 
 class PostsServiceImpl(
@@ -12,24 +14,28 @@ class PostsServiceImpl(
 ) : PostsService {
 
     override suspend fun getPosts(): List<PostResponse> {
-        return try {
-            client.get { url(HttpRoutes.POSTS) }
-        } catch(e: RedirectResponseException) {
-            // 3xx - responses
-            println("Error: ${e.response.status.description}")
-            emptyList()
-        } catch(e: ClientRequestException) {
-            // 4xx - responses
-            println("Error: ${e.response.status.description}")
-            emptyList()
-        } catch(e: ServerResponseException) {
-            // 5xx - responses
-            println("Error: ${e.response.status.description}")
-            emptyList()
-        } catch(e: Exception) {
-            println("Error: ${e.message}")
-            emptyList()
+        val httpResponse: HttpResponse = client.get("https://ktor.io/")
+        if (httpResponse.status.value in 200..299) {
+            println("Successful response!")
         }
+//        return try {
+//            client.get { url(HttpRoutes.POSTS) }
+//        } catch(e: RedirectResponseException) {
+//            // 3xx - responses
+//            println("Error: ${e.response.status.description}")
+//            emptyList()
+//        } catch(e: ClientRequestException) {
+//            // 4xx - responses
+//            println("Error: ${e.response.status.description}")
+//            emptyList()
+//        } catch(e: ServerResponseException) {
+//            // 5xx - responses
+//            println("Error: ${e.response.status.description}")
+//            emptyList()
+//        } catch(e: Exception) {
+//            println("Error: ${e.message}")
+//            emptyList()
+//        }
     }
 
     override suspend fun createPost(postRequest: PostRequest): PostResponse? {
