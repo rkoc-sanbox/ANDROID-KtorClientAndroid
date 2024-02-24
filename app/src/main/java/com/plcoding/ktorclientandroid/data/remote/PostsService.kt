@@ -15,7 +15,7 @@ import io.ktor.serialization.kotlinx.json.*
 
 interface PostsService {
 
-    suspend fun getPosts(): List<PostResponse>
+    suspend fun getPosts(): ByteArray
 
     suspend fun createPost(postRequest: PostRequest): PostResponse?
 
